@@ -1,0 +1,19 @@
+
+;; ----- smex-history -----
+(
+ goto-char
+ nodejs-repl
+ customize-group
+ package-autoremove
+ cd
+ 5x5
+ arp
+)
+
+;; ----- smex-data -----
+(
+ (customize-group . 2)
+ (package-autoremove . 2)
+ (nodejs-repl . 2)
+ (goto-char . 1)
+)
