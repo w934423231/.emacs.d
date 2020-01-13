@@ -1,52 +1,10 @@
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-			   ("melpa" . "http://elpa.emacs-china.org/melpa/"))))
+(package-initialize)
 
-;; 注意 elpa.emacs-china.org 是 Emacs China 中文社区在国内搭建的一个 ELPA 镜像
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;; cl - Common Lisp Extension
-(require 'cl)
+(require 'init-packages)
 
-;; Add Packages
-(defvar my/packages '(
-		      ;; --- Auto-completion ---
-		      company
-		      ;; --- Better Editor ---
-		      hungry-delete
-		      swiper
-		      counsel
-		      smartparens
-		      ;; --- Major Mode ---
-		      js2-mode
-		      ;; --- Minor Mode ---
-		      exec-path-from-shell
-		      ;; --- Themes ---
-		      monokai-theme
-		      ;; solarized-theme
-		      smex
-		      ) "Default packages")
-
-(setq package-selected-packages my/packages)
-
-(defun my/packages-installed-p ()
-  (loop for pkg in my/packages
-	when (not (package-installed-p pkg)) do (return nil)
-	finally (return t)))
-
-(unless (my/packages-installed-p)
-  (message "%s" "Refreshing package database...")
-  (package-refresh-contents)
-  (dolist (pkg my/packages)
-    (when (not (package-installed-p pkg))
-      (package-install pkg))))
-
-;; Find Executable Path on OS X
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))(package-initialize) ;;告诉emacs到哪里查找插件
-
-
+(setq ring-bell-function 'ignore)
 
 (tool-bar-mode -1) ;;关闭工具栏功能
 (scroll-bar-mode -1) ;;关闭el滚动条功能
@@ -61,13 +19,18 @@
 
 (global-set-key (kbd "<f2>") 'open-my-init-file) ;;按下f2按键打开我的emacs的配置文件
 
-(global-company-mode t)
 
 (recentf-mode t) ;;打开最近的文件
 
 (setq-default cursor-type 'bar) ;;改变光标样式
 
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
 (require 'org);;引入文件 org
+(global-set-key (kbd "C-+") 'text-scale-increase) ;;ctrl加上+可以让文本字体变大
+(global-set-key (kbd "C--") 'text-scale-decrease) ;;ctrl加上-可以让文本字体变小
+(global-set-key (kbd "C-0") 'text-scale-adjust) ;;字体变成普通情况
 
 (setq org-src-fontift-natively t) ;;org文件里的代码高亮
 
@@ -87,10 +50,7 @@
 
 (global-hl-line-mode t) ;;给文件夹光标所在行进行高亮
 
-(load-theme 'monokai t) ;;emacs开启时加载主题;
 
-(require 'hungry-delete)
-(global-hungry-delete-mode)   ;;一次行删除多余的空格
 
 
 
@@ -107,17 +67,17 @@
 (global-set-key (kbd "C-h f") 'counsel-describe-function)
 (global-set-key (kbd "C-h v") 'counsel-describe-variable)
 
+(abbrev-mode t);;;添加快捷键的模块
+(define-abbrev-table 'global-abbrev-table '(
+					    ("gst" "(global-set-key (kbd \"\") )") ;;;输入gst,然后按下空格键,就会补全一些东西
+					    ))
 
-(require 'smartparens-config)
+
+(require 'smartparens-config)(require 'smartparens-config)
+
 ;;(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
 (smartparens-global-mode t)
 
-;;config js2-mode for js files
-
-(setq auto-mode-alist
-      (append
-       '(("\\.js\\'" . js2-mode))
-       auto-mode-alist))  ;;所有的类型是javascript文件的话用js2-mode打开
 
 (global-set-key (kbd "C-h C-f") 'find-function)
 (global-set-key (kbd "C-h C-f") 'find-variable)
@@ -126,6 +86,7 @@
 
 (setq org-agenda-files '("~/org"))
 (global-set-key (kbd "C-c a" ) 'org-agenda)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -137,7 +98,7 @@
 
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
+ ;; custom-set-faces was added by qqq
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
